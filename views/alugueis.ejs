@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <% include ./includes/header.ejs %>
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <title>Alugueis</title>
+</head>
+<script> 
+    function spawnCard(imovel) {
+        var dormitorios = "&nbsp";
+        var suites = "";
+        var banheiros = "";
+        var vagas = "";
+        var iptu = "&nbsp";
+        var cond = "&nbsp";
+        if (imovel.dormitorios !== null) {
+            dormitorios = "<span class='fas fa-bed' data-toggle='tooltip' title='Dormitórios'></span>   " + imovel.dormitorios;
+        }
+        if (imovel.suites !== null) {
+            suites = "<span class='glyphicon glyphicon-bed' data-toggle='tooltip' title='Suítes'></span>   " + imovel.suites;
+        }
+        if (imovel.banheiros !== null) {
+            banheiros = "<span class='fas fa-shower' data-toggle='tooltip' title='Banheiros'></span>   " + imovel.banheiros;
+        }
+        if (imovel.vagas !== null) {
+            vagas = "<span class='fas fa-car' data-toggle='tooltip' title='Vagas'></span>   " + imovel.vagas;
+        }
+        if (imovel.iptu !== null) {
+            iptu = "IPTU: R$" + imovel.iptu;
+        }
+        if (imovel.condominio !== null) {
+            cond = "COND: R$" + imovel.condominio;
+        }
+        var card = "<div class='col-sm-3'>" + 
+                   "<div class='panel panel-default' style='text-align: center'>" + 
+                   "<div class='panel-body' style='text-align: left'>" + 
+                   "<img src='/galeria/" + imovel._id + "/thumb.jpg" + "'" + "alt='Anuncio' class='img-thumbnail'><br><br>" +
+                   "Valor: R$" + imovel.valor + "<br>" + iptu + "<br>" +cond +
+                   "</div>" +
+                   "<div class='panel-footer'>" + dormitorios + "  " + suites + "  " + banheiros + "  " + vagas + "</div>" +  
+                   "</div>" + 
+                   "</div>";
+        $('#searchResults').append(card);
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); 
+        });
+    }
+    function search() {
+        var tipo = $('#select_tipo').val();
+        var bairro = $('#select_bairro').val();
+        var preco = $('#number_preco').val();
+        console.log('Pesquisa recebida: ' + tipo + ' ' + bairro + ' ' + preco);
+        $('#searchResults').empty();
+        $.getJSON('/search/alugueis/' + tipo + '&' + bairro + '&' + preco, function(jq) {
+            for(var i = 0; i < jq.length; i++) {
+                console.log(jq[i]);
+                spawnCard(jq[i]);
+            }
+        });
+    }
+</script>
+<body>
+    <% include ./includes/nav.ejs %>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Alugueis</h1>
+            <p>Faça aqui sua pesquisa de aluguel</p>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="tipo">Tipo de Imóvel:</label>
+                    <% include ./includes/select-tipo.ejs %>
+                </div>
+                <div class="col-sm-2">
+                    <label for="bairro">Bairro:</label>
+                    <% include ./includes/select-bairro.ejs %>
+                </div>
+                <div class="col-sm-2">
+                    <label for="preco">Preço Máximo:</label>
+                    <input type="number" class="form-control" id="number_preco">
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary" id="btn_pesquisar" onclick="search();">Pesquisar</button>
+        </div>
+        <div id="searchResults" class="row">
+        </div>
+    </div>
+</body>
+</html>

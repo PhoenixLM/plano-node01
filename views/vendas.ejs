@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <% include ./includes/header.ejs %>
+    <link rel="stylesheet" href="/css/stylesheet.css">
+    <title>Vendas</title>
+</head>
+<script>
+    var procedencia = 'null';
+    function setProc(proc) {
+        procedencia = proc;
+        console.log(procedencia);
+    }
+    function spawnCard(imovel) {
+        var dormitorios = "&nbsp";
+        var suites = "";
+        var banheiros = "";
+        var vagas = "";
+        var iptu = "&nbsp";
+        var cond = "&nbsp";
+        if (imovel.dormitorios !== null) {
+            dormitorios = "<span class='fas fa-bed' data-toggle='tooltip' title='Dormitórios'></span>   " + imovel.dormitorios;
+        }
+        if (imovel.suites !== null) {
+            suites = "<span class='glyphicon glyphicon-bed' data-toggle='tooltip' title='Suítes'></span>   " + imovel.suites;
+        }
+        if (imovel.banheiros !== null) {
+            banheiros = "<span class='fas fa-shower' data-toggle='tooltip' title='Banheiros'></span>   " + imovel.banheiros;
+        }
+        if (imovel.vagas !== null) {
+            vagas = "<span class='fas fa-car' data-toggle='tooltip' title='Vagas'></span>   " + imovel.vagas;
+        }
+        if (imovel.iptu !== null) {
+            iptu = "IPTU: R$" + imovel.iptu;
+        }
+        if (imovel.condominio !== null) {
+            cond = "COND: R$" + imovel.condominio;
+        }
+        var card = "<div class='col-sm-3'>" + 
+                   "<div class='panel panel-default' style='text-align: center'>" + 
+                   "<div class='panel-body' style='text-align: left'>" + 
+                   "<img src='/galeria/" + imovel._id + "/thumb.jpg" + "'" + "alt='Anuncio' class='img-thumbnail'><br><br>" +
+                   "Valor: R$" + imovel.valor + "<br>" + iptu + "<br>" +cond +
+                   "</div>" +
+                   "<div class='panel-footer'>" + dormitorios + "  " + suites + "  " + banheiros + "  " + vagas + "</div>" +  
+                   "</div>" + 
+                   "</div>";
+        $('#searchResults').append(card);
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); 
+        });
+    }
+    function search() {
+        var tipo = $('#select_tipo').val();
+        var bairro = $('#select_bairro').val();
+        var preco = $('#number_preco').val();
+        if(preco === '') preco = "null"
+        console.log('Pesquisa recebida: ' + procedencia + ' ' + tipo + ' ' + bairro + ' ' + preco);
+        $('#searchResults').empty();
+        $.getJSON('/search/vendas/' + procedencia + '&' + tipo + '&' + bairro + '&' + preco, function(jq) {
+            for(var i = 0; i < jq.length; i++) {
+                console.log(jq[i]);
+                spawnCard(jq[i]);
+            }
+        });
+        
+    }
+    $(document).ready(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $(".radioGroup").click(function () {
+            $(".radioGroup").removeClass("active");
+            $(this).addClass("active");
+            procedencia = event.target.id;
+            search();
+        });
+    });
+</script>
+<body>
+    <% include ./includes/nav.ejs %>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Vendas</h1>
+            <p>Faça aqui sua pesquisa de compra</p>
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary radioGroup" id="construcao">Em Construção</button>
+                        <button type="button" class="btn btn-primary radioGroup" id="novo">Novos/Prontos (1ª revenda)</button>
+                        <button type="button" class="btn btn-primary radioGroup" id="revenda">Prontos/Revenda</button>
+                        <button type="button" class="btn btn-primary radioGroup active" id="null">Todos</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary">Oportunidades Únicas</button>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label for="tipo">Tipo de Imóvel:</label>
+                    <select name="tipo" class="form-control" id="select_tipo">
+                        <option value="null" selected>Todos</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="casa">Casa</option>
+                        <option value="casa em condominio">Casa em Condomínio</option>
+                        <option value="chacara">Chácara</option>
+                        <option value="cobertura">Cobertura</option>
+                        <option value="empreendimento">Empreendimento</option>
+                        <option value="fazenda">Fazenda</option>
+                        <option value="flat">Flat</option>
+                        <option value="galpao">Galpão</option>
+                        <option value="garagem">Garagem</option>
+                        <option value="kitinete">Kitinete</option>
+                        <option value="loja">Loja</option>
+                        <option value="predio comercial">Prédio Comercial</option>
+                        <option value="sala comercial">Sala Comercial</option>
+                        <option value="salas conjuntos">Salas/Conjuntos</option>
+                        <option value="terreno">Terreno</option>
+                        <option value="outros">Outros</option>
+                        </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="bairro">Bairro:</label>
+                    <select name="bairro" class="form-control" id="select_bairro">
+                        <option value="null" selected>Todos</option>
+                        <option value="aguas claras">Aguas Claras</option>
+                        <option value="asa norte">Asa Norte</option>
+                        <option value="asa sul">Asa Sul</option>
+                        <option value="brazlandia">Brazlândia</option>
+                        <option value="ceilandia">Ceilândia</option>
+                        <option value="centro">Centro</option>
+                        <option value="cruzeiro">Cruzeiro</option>
+                        <option value="cruzeiro novo">Cruzeiro Novo</option>
+                        <option value="lago norte">Lago Norte</option>
+                        <option value="lago sul">Lago Sul</option>
+                        <option value="ponta negra">Ponta Negra</option>
+                        <option value="samambaia">Samambaia</option>
+                        <option value="samambaia norte">Samambaia Norte</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="santa maria">Santa Maria</option>
+                        <option value="shin">Setor de Habitações Individuais Norte</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="smpw">Setor de Mansões Park Way</option>
+                        <option value="setor fumal">Setor Fumal</option>
+                        <option value="shvp">Setor Habitacional Vincente Pires</option>
+                        <option value="noroeste">Setor Noroeste</option>
+                        <option value="sudoeste">Setor Sudoeste</option>
+                        <option value="sig">SIG</option>
+                        <option value="sobradinho">Sobradinho</option>
+                        <option value="taguatinga">Taguatinga</option>
+                        <option value="vicente pires">Vicente Pires</option>
+                        <option value="vila planalto">Vila Planalto</option>
+                        <option value="zona industrial">Zona Industrial</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label for="preco">Preço Máximo:</label>
+                    <input type="number" class="form-control" id="number_preco" placeholder="Todos">
+                </div>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary" id="btn_pesquisar" onclick="search();">Pesquisar</button>
+        </div>
+        <div id="searchResults" class="row">
+        </div>
+    </div>
+</body>
+</html>

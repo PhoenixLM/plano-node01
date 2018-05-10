@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <% include ./includes/header.ejs %>
+    <title>Plano</title>
+</head>
+<script>
+    $(document).ready(function() {
+        $(window).resize(function() {
+            if($(window).width() >= 768) {
+                $('#vertical-padding').show();
+            } else {
+                $('#vertical-padding').hide();
+            }
+        }).resize();
+    });
+</script>
+<body>
+    <% include ./includes/nav.ejs %>
+    <div class="bg-img row">
+        <br><br><br>
+        <div id="vertical-padding">
+            <br><br><br><br><br><br>
+        </div>
+        <div class="col-sm-3" style="text-align: center; padding: 15px;">
+            <a href="/vendas" class="btn btn-info" role="button">COMPRAR</a>
+        </div>
+        <div class="col-sm-3" style="text-align: center; padding: 15px;">
+            <a href="/alugueis" class="btn btn-info" role="button">&nbsp;ALUGAR&nbsp;</a>
+        </div>
+        <div class="col-sm-3" style="text-align: center; padding: 15px;">
+            <a href="#" class="btn btn-info" role="button">ANUNCIAR</a>
+        </div>
+        <div class="col-sm-3" style="text-align: center; padding: 15px;">
+            <a href="#" class="btn btn-info" role="button">CLIENTE</a>
+        </div>
+    </div>
+    <div class="bg-solid row">
+        <div class="col-sm-6">
+            <ul>
+                <li>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Donec sed purus et est vestibulum pulvinar id quis arcu. 
+                    Maecenas a aliquet nisl. Pellentesque vehicula dui sit amet 
+                    eleifend tincidunt. Donec fermentum orci eu dui convallis 
+                    dictum. In egestas ipsum sed imperdiet elementum. Nam 
+                    pellentesque facilisis erat suscipit finibus. Phasellus 
+                    condimentum faucibus scelerisque. Vestibulum tincidunt, 
+                    sem a efficitur varius, magna ex finibus justo, non luctus 
+                    dolor lacus vitae tellus. Suspendisse vitae neque mollis, 
+                    viverra lorem nec, fermentum quam.
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <ul>
+                <li>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Donec sed purus et est vestibulum pulvinar id quis arcu. 
+                    Maecenas a aliquet nisl. Pellentesque vehicula dui sit amet 
+                    eleifend tincidunt. Donec fermentum orci eu dui convallis 
+                    dictum. In egestas ipsum sed imperdiet elementum. Nam 
+                    pellentesque facilisis erat suscipit finibus. Phasellus 
+                    condimentum faucibus scelerisque. Vestibulum tincidunt, 
+                    sem a efficitur varius, magna ex finibus justo, non luctus 
+                    dolor lacus vitae tellus. Suspendisse vitae neque mollis, 
+                    viverra lorem nec, fermentum quam.
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
